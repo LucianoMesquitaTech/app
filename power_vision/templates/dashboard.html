@@ -1,0 +1,79 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PowerVision | Monitoramento Ambiental</title>
+
+  <!-- Ícone e Fonts -->
+  <link rel="icon" href="{% static 'power_vision/favicon.png' %}" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap"rel="stylesheet"
+  />
+
+  <!-- Estilos: Dark Mode embutido -->
+  <link rel="stylesheet" href="{% static 'power_vision/dashboard.css' %}">
+
+</head>
+<body>
+
+  <!-- Topbar -->
+  <header class="topbar">
+    <h1>PowerVision</h1>
+    <div class="user-area">
+      <span class="username">👋 {{ usuario_nome }}</span>
+      <a href="{% url 'logout' %}" class="btn logout-btn">
+        <i class="fas fa-sign-out-alt"></i>
+        Sair
+      </a>
+      <button id="toggleTheme" class="btn theme-toggle">
+        🌓 Alternar Tema
+      </button>
+    </div>
+  </header>
+
+  <!-- Conteúdo Principal -->
+  <main class="dashboard-container">
+
+    <!-- Leituras em Tempo Real -->
+    <section class="cards">
+      <div class="card temperature">
+        <h3>🌡️ Temperatura Atual</h3>
+        <p>{{ ultima.temperatura|default:"—" }}°C</p>
+      </div>
+      <div class="card humidity">
+        <h3>💧 Umidade Atual</h3>
+        <p>{{ ultima.umidade|default:"—" }}%</p>
+      </div>
+      <div class="card timestamp">
+        <h3>🕒 Última Leitura</h3>
+        <p>{{ ultima.data_hora|date:"d/m/Y H:i:s"|default:"—" }}</p>
+      </div>
+    </section>
+
+    <!-- Gráficos Históricos -->
+    <section class="charts-container">
+      <div class="card">
+        <h3>🌡️ Gráfico de Temperatura</h3>
+        <canvas id="graficoTemperatura"></canvas>
+      </div>
+      <div class="card">
+        <h3>💧 Gráfico de Umidade</h3>
+        <canvas id="graficoUmidade"></canvas>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Dados JSON para Chart.js -->
+  {{ labels|json_script:"labelsJSON" }}
+  {{ temperaturas|json_script:"tempJSON" }}
+  {{ umidades|json_script:"umidJSON" }}
+
+  <!-- Bibliotecas e Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="{% static 'power_vision/dashboard.js' %}"></script>
+
+</body>
+</html>

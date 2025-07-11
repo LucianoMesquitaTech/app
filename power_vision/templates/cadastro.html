@@ -1,0 +1,105 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Cadastro - PowerVision</title>
+
+  <!-- Fontes + CSS -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'power_vision/cadastro.css' %}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+  <div class="auth-container">
+    <div class="auth-card">
+      <h1 style="margin-bottom: 0.2em; font-size:2.1em; color:#232946;">
+        <i class="fas fa-bolt"></i> Power Vision
+      </h1>
+      <p class="subtitle" style="font-size:1.1em; margin-bottom:1.2em; color:#555;">
+        Sua energia em tempo real
+      </p>
+      <h2><i class="fas fa-user-plus"></i> Criar Conta</h2>
+
+      {% if messages %}
+      <ul>
+        {% for message in messages %}
+        <li class="{{ message.tags }}">{{ message }}</li>
+        {% endfor %}
+      </ul>
+      {% endif %}
+
+      <form method="POST" action="{% url 'cadastro' %}" class="auth-form">
+        {% csrf_token %}
+        <div class="form-group">
+          <label for="nome">Nome</label>
+          <input type="text" id="nome" name="nome" required>
+        </div>
+
+        <div class="form-group">
+          <label for="sobrenome">Sobrenome</label>
+          <input type="text" id="sobrenome" name="sobrenome" required>
+        </div>
+
+        <div class="form-group">
+          <label for="endereco">Endereço</label>
+          <input type="text" id="endereco" name="endereco" required>
+        </div>
+
+        <div class="form-group">
+          <label for="numero">Número</label>
+          <input type="text" id="numero" name="numero" required>
+        </div>
+
+        <div class="form-group">
+          <label for="telefone">Telefone</label>
+          <input type="tel" id="telefone" name="telefone" required>
+        </div>
+
+        <div class="form-group">
+          <label for="email">E-mail</label>
+          <input type="email" id="email" name="email" required>
+        </div>
+
+        <div class="form-group">
+          <label for="sexo">Sexo</label>
+          <select id="sexo" name="sexo" required>
+            <option value="" disabled selected>Selecione</option>
+            <option value="masculino">Masculino</option>
+            <option value="feminino">Feminino</option>
+            <option value="outro">Outro</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="data_nascimento">Data de Nascimento</label>
+          <input type="date" id="data_nascimento" name="data_nascimento" required>
+        </div>
+
+        <div class="form-group">
+          <label for="usuario">Usuário</label>
+          <input type="text" id="usuario" name="usuario" required>
+        </div>
+
+        <div class="form-group">
+          <label for="senha">Senha</label>
+          <input type="password" id="senha" name="senha" required>
+        </div>
+
+        <div class="form-group">
+          <label for="confirmar_senha">Confirmar Senha</label>
+          <input type="password" id="confirmar_senha" name="confirmar_senha" required>
+        </div>
+
+        <button type="submit" class="btn-primary w-100">Cadastrar</button>
+      </form>
+
+      <div class="link">
+        <span>Já tem uma conta?</span>
+        <a href="{% url 'login' %}">Entrar</a>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
