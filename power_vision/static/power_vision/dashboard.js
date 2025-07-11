@@ -10,36 +10,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const elTemp = document.getElementById('tempJSON');
   const elUmid = document.getElementById('umidJSON');
 
-// Temperatura
-new Chart(document.getElementById("graficoTemperatura"), {
-  type: 'line',
-  data: {
-    labels,
-    datasets: [{
-      label: 'Temperatura (°C)',
-      data: temperaturas,
-      borderColor: '#3f51b5',
-      backgroundColor: 'transparent',
-      tension: 0.4
-    }]
-  }
-});
-
-// Umidade
-new Chart(document.getElementById("graficoUmidade"), {
-  type: 'line',
-  data: {
-    labels,
-    datasets: [{
-      label: 'Umidade (%)',
-      data: umidades,
-      borderColor: '#e91e63',
-      backgroundColor: 'transparent',
-      tension: 0.4
-    }]
-  }
-});
-
   // ⚠️ Valida presença dos elementos
   if (!elLabels || !elTemp || !elUmid) {
     console.error("❌ Elementos JSON ausentes.");
@@ -58,7 +28,7 @@ new Chart(document.getElementById("graficoUmidade"), {
     return;
   }
 
-  // 🎨 Configuração base compartilhada entre os gráficos
+  // 🎨 Configuração base
   const configBase = {
     type: 'line',
     options: {
@@ -98,18 +68,6 @@ new Chart(document.getElementById("graficoUmidade"), {
   } else {
     console.warn("⚠️ Canvas de temperatura não encontrado.");
   }
-  const toggleBtn = document.getElementById("toggleTheme");
-  const body = document.body;
-
-// Carrega preferência salva
-  if (localStorage.theme === "dark") {
-  body.classList.add("dark");
-}
-
-  toggleBtn.addEventListener("click", () => {
-  body.classList.toggle("dark");
-  localStorage.theme = body.classList.contains("dark") ? "dark" : "light";
-});
 
   // 💧 Gráfico de Umidade
   const ctxUmid = document.getElementById('graficoUmidade')?.getContext('2d');
@@ -132,6 +90,18 @@ new Chart(document.getElementById("graficoUmidade"), {
     console.warn("⚠️ Canvas de umidade não encontrado.");
   }
 
+  // 🌗 Alternância de tema
+  const toggleBtn = document.getElementById("toggleTheme");
+  const body = document.body;
+
+  if (localStorage.theme === "dark") {
+    body.classList.add("dark");
+  }
+
+  toggleBtn.addEventListener("click", () => {
+    body.classList.toggle("dark");
+    localStorage.theme = body.classList.contains("dark") ? "dark" : "light";
+  });
+
   console.log("✅ Gráficos recriados com sucesso!");
-  
 });
