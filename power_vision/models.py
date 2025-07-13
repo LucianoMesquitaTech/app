@@ -23,3 +23,5 @@ class Medicao(models.Model):
 
     def __str__(self):
         return f"{self.data_hora:%d/%m/%Y %H:%M:%S} → {self.temperatura:.1f}°C / {self.umidade:.1f}%"
+    
+    
