@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', () => {
     console.error("❌ Erro ao parsear dados JSON:", error);
     return;
   }
-
+  
   // 🎨 Configuração base
   const configBase = {
     type: 'line',
@@ -112,7 +112,28 @@ document.addEventListener('DOMContentLoaded', () => {
     console.warn("⚠️ Canvas de umidade não encontrado.");
   }
 
-  
+   async function atualizarGraficos() {
+    try {
+      const res = await fetch('/api/dados-climaticos/');
+      const json = await res.json();
+
+      // Atualiza Temperatura
+      window.graficoTemperatura.data.labels = json.labels;
+      window.graficoTemperatura.data.datasets[0].data = json.temperatura;
+      window.graficoTemperatura.update();
+
+      // Atualiza Umidade
+      window.graficoUmidade.data.labels = json.labels;
+      window.graficoUmidade.data.datasets[0].data = json.umidade;
+      window.graficoUmidade.update();
+
+    } catch (e) {
+      console.error("Erro ao atualizar gráficos:", e);
+    }
+  }
+
+  // 5) Chama a função a cada 10 segundos
+  setInterval(atualizarGraficos, 10000);
 
   console.log("✅ Gráficos recriados com sucesso!");
 });

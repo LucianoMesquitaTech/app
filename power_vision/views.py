@@ -9,6 +9,27 @@ from django.contrib.auth import logout
 from django.utils.timezone import localtime
 import json
 
+# Atualizando os graficos.
+from django.http import JsonResponse
+from django.utils.timezone import localtime
+from .models import Medicao
+
+def dados_climaticos(request):
+    # 1) Use Medicao.objects (não medicao.objets)
+    ultimas = Medicao.objects.order_by('-data_hora')[:500]
+    # 2) Inverta a lista para ordem cronológica
+    leituras = list(ultimas)[::-1]
+
+    labels      = [localtime(m.data_hora).strftime("%H:%M:%S") for m in leituras]
+    temperatura = [m.temperatura for m in leituras]
+    umidade     = [m.umidade for m in leituras]
+
+    # 3) Atenção às chaves: singular ou plural? Use singular pra bater com o JS abaixo
+    return JsonResponse({
+        'labels': labels,
+        'temperatura': temperatura,
+        'umidade': umidade,
+    })
 
 # Create your views here.
 def login(request):
