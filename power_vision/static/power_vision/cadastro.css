@@ -21,8 +21,6 @@ body {
   min-height: 100vh;
 }
 
-
-
 .user-area {
   display: flex;
   gap: 15px;

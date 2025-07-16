@@ -7,6 +7,8 @@ from django.http import JsonResponse
 from .models import Medicao
 from django.contrib.auth import logout
 from django.utils.timezone import localtime
+import json
+
 
 # Create your views here.
 def login(request):
@@ -98,7 +100,6 @@ def dashboard(request):
     }
     return render(request, 'power_vision/dashboard.html', context)
 
-
 @csrf_exempt
 def receber_dados(request):
     if request.method == 'POST':
@@ -119,7 +120,7 @@ def receber_dados(request):
     return JsonResponse({'erro': 'Método não permitido'}, status=405)
 
 def dashboard(request):
-    medicoes = Medicao.objects.order_by('-data_hora')[:50]
+    medicoes = Medicao.objects.order_by('-data_hora')[:500]
     ultima = medicoes[0] if medicoes else None
 
     labels = [localtime(m.data_hora).strftime('%H:%M') for m in medicoes]
@@ -151,3 +152,25 @@ def sair(request):
     logout(request)
     return redirect('login')
 
+
+
+@csrf_exempt
+def receber_dados(request):
+    if request.method == "POST":
+        try:
+            data = json.loads(request.body)
+            temperatura = data.get("temperatura")
+            umidade = data.get("umidade")
+
+            Medicao.objects.create(
+                temperatura=temperatura,
+                umidade=umidade
+            )
+
+            print(f"Salvo: {temperatura}°C | {umidade}%")
+            return JsonResponse({"status": "ok"})
+        except Exception as e:
+            print("Erro:", e)
+            return JsonResponse({"status": "erro"})
+    return JsonResponse({"status": "invalido"})
+                                                                                         

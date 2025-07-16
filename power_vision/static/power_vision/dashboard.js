@@ -39,11 +39,20 @@ document.addEventListener('DOMContentLoaded', () => {
         easing: 'easeOutQuart'
       },
       scales: {
-        x: { ticks: { color: '#444' } },
-        y: { ticks: { color: '#444' }, beginAtZero: true }
+        x: { ticks: { color: '#D9A273' },grid: {color:'#D9A273', lineWidth: 0.5} },
+        y: { ticks: { color: '#D9A273' }, grid: {color:'#D9A273'}, beginAtZero: false }
       },
       plugins: {
-        legend: { labels: { color: '#222' } }
+        legend: { labels: { color: '#D9A273' } },
+        datalabels: {
+    display: true,
+    color: '#D9A273',
+    font: {
+      weight: 'bold',
+      size: 12
+    },
+    formatter: value => `${value.toFixed(1)}°C`
+  }
       }
     }
   };
@@ -51,6 +60,9 @@ document.addEventListener('DOMContentLoaded', () => {
   // 🌡️ Gráfico de Temperatura
   const ctxTemp = document.getElementById('graficoTemperatura')?.getContext('2d');
   if (ctxTemp) {
+    const gradiente = ctxTemp.createLinearGradient(0, 0, 0, 400);
+    gradiente.addColorStop(0, 'rgba(244,63,94,0.1)');
+    gradiente.addColorStop(1, 'rgba(244,63,94,0)');
     window.graficoTemperatura = new Chart(ctxTemp, {
       ...configBase,
       data: {
@@ -58,10 +70,13 @@ document.addEventListener('DOMContentLoaded', () => {
         datasets: [{
           label: 'Temperatura (°C)',
           data: dadosTemperatura,
-          borderColor: '#f43f5e',
-          backgroundColor: 'rgba(244,63,94,0.1)',
+          borderColor: '#D9A273',
+          backgroundColor: gradiente,
           tension: 0.3,
-          fill: true
+          fill: true,
+          pointRadius: 0,
+          pointHoverRadius: 4
+
         }]
       }
     });
@@ -72,6 +87,9 @@ document.addEventListener('DOMContentLoaded', () => {
   // 💧 Gráfico de Umidade
   const ctxUmid = document.getElementById('graficoUmidade')?.getContext('2d');
   if (ctxUmid) {
+    const gradiente = ctxUmid.createLinearGradient(0, 0, 0, 400);
+    gradiente.addColorStop(0, 'rgba(37,99,235,0.1)');
+    gradiente.addColorStop(1, 'rgba(37,99,235,0)');
     window.graficoUmidade = new Chart(ctxUmid, {
       ...configBase,
       data: {
@@ -79,10 +97,14 @@ document.addEventListener('DOMContentLoaded', () => {
         datasets: [{
           label: 'Umidade (%)',
           data: dadosUmidade,
-          borderColor: '#2563eb',
-          backgroundColor: 'rgba(37,99,235,0.1)',
+          borderColor: '#D9A273',
+          backgroundColor: gradiente,
           tension: 0.3,
-          fill: true
+          fill: true,
+          pointRadius: 0,
+          pointHoverRadius: 4
+
+          
         }]
       }
     });
@@ -90,18 +112,7 @@ document.addEventListener('DOMContentLoaded', () => {
     console.warn("⚠️ Canvas de umidade não encontrado.");
   }
 
-  // 🌗 Alternância de tema
-  const toggleBtn = document.getElementById("toggleTheme");
-  const body = document.body;
-
-  if (localStorage.theme === "dark") {
-    body.classList.add("dark");
-  }
-
-  toggleBtn.addEventListener("click", () => {
-    body.classList.toggle("dark");
-    localStorage.theme = body.classList.contains("dark") ? "dark" : "light";
-  });
+  
 
   console.log("✅ Gráficos recriados com sucesso!");
 });
